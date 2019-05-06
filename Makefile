@@ -25,6 +25,10 @@ KERNELCFILES:=$(foreach dir, $(KERNELCDIR), $(CPPFILEWILD))
 LINKLIST:=$(foreach dir, $(OBJDIR), $(OBJFILEWILD))
 
 all:
+	$(MAKE) build
+	$(MAKE) link
+
+build:
 	echo $(ASMFILES)
 	for file in $(ASMFILES); do \
 		outname=$$(basename $$file).o; \
@@ -36,10 +40,10 @@ all:
 		$(CC) -c $$file -o $(OBJDIR)/$$outname $(CFLAGS); \
 	done
 
-
 link:
 	$(CC) -T $(KERNELLINKFILE) -o MOS.bin $(CFLAGS) $(LINKLIST) $(LFLAGS)
 	
 clean:
+	rm MOS.bin
 	rm obj/*.o
 
