@@ -14,6 +14,7 @@ ASMFILEWILD=$(wildcard $(dir)/*.s)
 
 KERNELCDIR=kernel
 CPPFILEWILD=$(wildcard $(dir)/*.c*)
+HFILEWILD=$(wildcard $(dir)/*.h)
 
 KERNELLINKFILE=kernel/link/link.ld
 
@@ -25,6 +26,7 @@ KERNELCFILES:=$(foreach dir, $(KERNELCDIR), $(CPPFILEWILD))
 LINKLIST:=$(foreach dir, $(OBJDIR), $(OBJFILEWILD))
 
 all:
+	echo $(KERNELCFILES)
 	$(MAKE) build
 	$(MAKE) link
 
@@ -35,6 +37,7 @@ build:
 		$(ASMC) $$file -o $(OBJDIR)/$$outname ; \
 	done
 
+#	$(CC) -c $(KERNELCFILES) -o $(OBJDIR)/test.o $(CFLAGS)
 	for file in $(KERNELCFILES); do \
 		outname=$$(basename $$file).o; \
 		$(CC) -c $$file -o $(OBJDIR)/$$outname $(CFLAGS); \
@@ -44,6 +47,6 @@ link:
 	$(CC) -T $(KERNELLINKFILE) -o MOS.bin $(CFLAGS) $(LINKLIST) $(LFLAGS)
 	
 clean:
-	rm MOS.bin
-	rm obj/*.o
+	-rm MOS.bin
+	-rm obj/*.o
 
