@@ -1,16 +1,20 @@
 #include "vga.h"
 
-void terminal_init()
+VGATerminal term;
+
+void helloworld()
 {
-	VGATerminal terminal;
-	terminal.setcolor(0x01, 0x0f);
-	terminal.writestring("HELLO WORLD \n");
+	term.writestring("HELLO WORLD\n");
 }
 
 extern "C"
 {
+	int __cxa_atexit()
+	{
+		return 0;
+	}
 	void kernel_main(void)
 	{
-		terminal_init();
+		helloworld();
 	}
 }

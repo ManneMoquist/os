@@ -16,8 +16,8 @@ VGATerminal::VGATerminal()
 	row = 0;
 	column = 0;
 	offset = 0;
-	uint8_t foregroundColor = 0x0f;
-	uint8_t backgroundColor = 0x00;
+	uint8_t foregroundColor = VGA_WHITE;
+	uint8_t backgroundColor = VGA_BLACK;
 	color = foregroundColor | (backgroundColor << 4);
 	buffer = (uint16_t*) 0xB8000;
 
@@ -35,6 +35,7 @@ VGATerminal::VGATerminal()
 
 VGATerminal::~VGATerminal()
 {
+	setcolor(VGA_WHITE, VGA_BLACK);
 	writestring("VGA TERMINAL TERMINATED \n");
 }
 
