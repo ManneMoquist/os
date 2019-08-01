@@ -37,14 +37,15 @@ private:
 	uint8_t color;
   	uint16_t* buffer;
 	void init();
-	void putchar(char c);
 	void write(const char* data, size_t size);
 	void scroll();
 
 public:
+	void putchar(char c);
 	void writestring(const char* string);
 	void setcolor(uint8_t foreground, uint8_t background = 0x00);
 private:
 	uint16_t* getScreenBuffer();
 };
+
 #endif

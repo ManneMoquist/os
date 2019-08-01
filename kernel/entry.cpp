@@ -1,11 +1,5 @@
-#include "vga.h"
-
-VGATerminal term;
-
-void helloworld()
-{
-	term.writestring("HELLO WORLD\n");
-}
+#include<stdio.h>
+#include<string.h>
 
 extern "C"
 {
@@ -15,6 +9,11 @@ extern "C"
 	}
 	void kernel_main(void)
 	{
-		helloworld();
+		char* test = (char*)"ABCDEFGHIJKLMNOPQRSTUVXYZ";
+		char* another = (char*)"MANNE";
+		memcpy(test,another,7);
+		printf("%s\n",test);
+		memset(test, '$', 3);
+		printf("%s\n",test);
 	}
 }

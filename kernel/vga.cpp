@@ -2,14 +2,8 @@
 #include<stddef.h>
 #include<stdint.h>
 #include"vga.h"
+#include<string.h>
 
-size_t strlen(const char* str)
-{
-	size_t len = 0;
-	while(str[len])
-		len++;
-	return len;
-}//should be moved to C-library as soon as possible
 
 VGATerminal::VGATerminal()
 {

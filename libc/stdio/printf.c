@@ -12,11 +12,11 @@ static int print(const char * str, size_t len)
 		{
 			return -1;
 		}
-		return 1;
 	}
+	return 1;
 }
 
-int printf(const char * restrict format, ...)
+int printf(const char * format, ...)
 {
 	int written = 0;
 	va_list args;
@@ -31,6 +31,38 @@ int printf(const char * restrict format, ...)
 				case 'd':
 				case 'i':
 					// HANDLE INTEGER
+					{
+						int tenths = 1;
+						int numdigits = 0;
+						int value = (int) va_arg(args, int);
+						if(value == 0)
+						{
+							putchar('0');
+						}
+						else
+						{
+							if(value < 0)
+							{
+								putchar('-');
+								value *= -1;
+							}
+							while(value >= tenths)
+							{
+								tenths *= 10;
+								numdigits++;
+							}
+							char string[256];
+							for(int i = 0; i < numdigits; i++)
+							{
+								tenths /= 10;
+								string[i] = '0' + (value / tenths);
+								value %= tenths;
+							}
+							string[numdigits] = '\0';
+							size_t length = strlen(string);
+							print(string, length);
+						}
+					}
 					break;
 				case 'u':
 					// HANDLE UNSIGNED INTIGER
@@ -47,14 +79,16 @@ int printf(const char * restrict format, ...)
 				case 'a':
 				case 'A':
 				case 'c':
-					{
+				{
 					char c = (char)va_arg(args, int);
-					putchar(c);
-					} break;
+					putchar((int)c);
+					written++;
+				} break;
 				case 's':
 				{
 					const char* string = va_arg(args, const char*);
 					size_t length = strlen(string);
+					written += strlen(string);
 					if(print(string, length) != 1)
 					{
 						return -1;
@@ -74,8 +108,13 @@ int printf(const char * restrict format, ...)
 					return -1;
 					break;
 			}
-			format++;
 		}
+		else
+		{
+			putchar(*format);
+			written++;
+		}
+		format++;
 	}
 	va_end(args);
 	written = 1;
