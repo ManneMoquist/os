@@ -9,11 +9,11 @@ extern "C"
 	}
 	void kernel_main(void)
 	{
-		char* test = (char*)"ABCDEFGHIJKLMNOPQRSTUVXYZ";
-		char* another = (char*)"MANNE";
-		memcpy(test,another,7);
-		printf("%s\n",test);
-		memset(test, '$', 3);
-		printf("%s\n",test);
+		char str1[20];
+		char str2[20];
+		strcpy(str1, "To be ");
+		strcpy(str2, "or not to be");
+		strncat(str1, str2, 6);
+		printf(str1);
 	}
 }
