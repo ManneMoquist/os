@@ -1,7 +1,7 @@
 #pragma once
 /* defines */
 #define EOF (-1)
-#define NULL ((void*)0)
+#define NULL 0L
 
 /* Formatted input output */
 int printf(const char * format, ...);
