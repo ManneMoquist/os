@@ -3,9 +3,10 @@ CC=
 CFLAGS=-ffreestanding -O2 -Wall -Wextra -fno-exceptions -fno-rtti -nostdlib -Iinclude
 LFLAGS=-lgcc -L./libs -lk
 ARCH=i686
+NASM_FLAGS=-felf32
 
 CC:=$(ARCH)-elf-g++
-ASMC:=$(ARCH)-elf-as
+NASM:=nasm
 AR:=$(ARCH)-elf-ar
 
 ASMFILES:=$(foreach dir, $(ASMDIRS), $(ASMFILEWILD))
@@ -20,7 +21,7 @@ KERNELLINKFILE=kernel/link/link.ld
 
 KERNEL_SRC:=kernel/entry.cpp kernel/vga.cpp kernel/terminal.cpp
 KERNEL_H:=kernel/vga.h kernel/terminal.h
-KERNEL_OFILES=obj/vga.o obj/entry.o obj/asm/boot.o obj/terminal.o
+KERNEL_OFILES=obj/vga.o obj/entry.o obj/terminal.o obj/asm/boot.o
 KERNEL_OBJ:=$(CRTI_OBJ) $(CRTBEGIN_OBJ) $(KERNEL_OFILES) $(CRTEND_OBJ) $(CRTN_OBJ)
 
 LIBK_CFLAGS=-O2 -g -Wall -Wextra -ffreestanding -D__is_libc -I$(LIBK_INCLUDE) -D__is_libk
@@ -38,9 +39,9 @@ libc: libc.a
 obj/%.o: kernel/%.cpp $(KERNEL_H)
 	$(CC) -c -o $@ $<  $(CFLAGS)
 
-obj/asm/%.o: kernel/asm/%.s 
+obj/asm/%.o: kernel/asm/%.asm
 	-mkdir -p obj/asm
-	$(ASMC) $< -o $@
+	$(NASM) $(NASM_FLAGS) $< -o $@
 
 obj/libk/stdio/%.o: libc/stdio/%.c $(LIBK_H)
 	-mkdir -p obj/libk/stdio
