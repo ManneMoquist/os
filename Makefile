@@ -61,6 +61,9 @@ libs/libk.a: $(LIBK_OBJ)
 MOS.bin: $(KERNEL_OBJ) libs/libk.a
 	$(CC) -T $(KERNELLINKFILE) $(KERNEL_OBJ) $(CFLAGS) $(LFLAGS) -o MOS.bin
 
+link:
+	$(CC) -T $(KERNELLINKFILE) $(KERNEL_OBJ) $(CFLAGS) $(LFLAGS) -o MOS.bin
+
 clean:
 	@echo $(LIBK_OBJ)
 	-rm MOS.bin

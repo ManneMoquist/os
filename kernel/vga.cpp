@@ -13,7 +13,7 @@ VGATerminal::VGATerminal()
 	uint8_t foregroundColor = VGA_WHITE;
 	uint8_t backgroundColor = VGA_BLACK;
 	color = foregroundColor | (backgroundColor << 4);
-	buffer = (uint16_t*) 0xB8000;
+	buffer = (uint16_t*) 0xC00B8000;
 
 	for(size_t y = 0; y < VGA_HEIGHT; y++)
 	{
