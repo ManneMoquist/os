@@ -1,7 +1,7 @@
+#include"vga.h"
 #include<stdbool.h>
 #include<stddef.h>
 #include<stdint.h>
-#include"vga.h"
 #include<string.h>
 
 

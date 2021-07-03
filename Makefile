@@ -5,7 +5,8 @@ LFLAGS=-lgcc -L./libs -lk
 ARCH=i686
 NASM_FLAGS=-felf32
 
-CC:=$(ARCH)-elf-g++
+CPPC:=$(ARCH)-elf-g++
+CC:=$(ARCH)-elf-gcc
 NASM:=nasm
 AR:=$(ARCH)-elf-ar
 
@@ -13,8 +14,8 @@ ASMFILES:=$(foreach dir, $(ASMDIRS), $(ASMFILEWILD))
 ASM_OUT:=$(addprefix obj/, $(addsuffix .o, $(notdir $(ASMFILES))))
 
 CRTI_OBJ=obj/asm/crti.o
-CRTBEGIN_OBJ:=$(shell $(CC) $(CFLAGS) -print-file-name=crtbegin.o)
-CRTEND_OBJ:=$(shell $(CC) $(CFLAGS) -print-file-name=crtend.o)
+CRTBEGIN_OBJ:=$(shell $(CPPC) $(CFLAGS) -print-file-name=crtbegin.o)
+CRTEND_OBJ:=$(shell $(CPPC) $(CFLAGS) -print-file-name=crtend.o)
 CRTN_OBJ=obj/asm/crtn.o
 
 KERNELLINKFILE=kernel/link/link.ld
@@ -37,7 +38,7 @@ bin: MOS.bin
 libc: libc.a
 
 obj/%.o: kernel/%.cpp $(KERNEL_H)
-	$(CC) -c -o $@ $<  $(CFLAGS)
+	$(CPPC) -c -o $@ $<  $(CFLAGS)
 
 obj/asm/%.o: kernel/asm/%.asm
 	-mkdir -p obj/asm
@@ -45,11 +46,11 @@ obj/asm/%.o: kernel/asm/%.asm
 
 obj/libk/stdio/%.o: libc/stdio/%.c $(LIBK_H)
 	-mkdir -p obj/libk/stdio
-	$(CC) -c $< -o $@  $(LIBK_CFLAGS)
+	$(CPPC) -c $< -o $@  $(LIBK_CFLAGS)
 
 obj/libk/string/%.o: libc/string/%.c $(LIBK_H)
 	-mkdir -p obj/libk/string
-	$(CC) -c $< -o $@  $(LIBK_CFLAGS)
+	$(CPPC) -c $< -o $@  $(LIBK_CFLAGS)
 
 libs/libk.a: $(LIBK_OBJ)
 	-mkdir -p libs
@@ -59,10 +60,10 @@ libs/libk.a: $(LIBK_OBJ)
 	$(AR) rcs $@ $(LIBK_OBJ)
 
 MOS.bin: $(KERNEL_OBJ) libs/libk.a
-	$(CC) -T $(KERNELLINKFILE) $(KERNEL_OBJ) $(CFLAGS) $(LFLAGS) -o MOS.bin
+	$(CPPC) -T $(KERNELLINKFILE) $(KERNEL_OBJ) $(CFLAGS) $(LFLAGS) -o MOS.bin
 
 link:
-	$(CC) -T $(KERNELLINKFILE) $(KERNEL_OBJ) $(CFLAGS) $(LFLAGS) -o MOS.bin
+	$(CPPC) -T $(KERNELLINKFILE) $(KERNEL_OBJ) $(CFLAGS) $(LFLAGS) -o MOS.bin
 
 clean:
 	@echo $(LIBK_OBJ)

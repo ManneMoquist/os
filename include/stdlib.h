@@ -1,4 +1,9 @@
-#pragma once
+#ifndef _LIBC_STDLIB_H
+#define _LIBC_STDLIB_H
+
+#if defined (__cplusplus)
+extern "C" {
+#endif
 
 // Macro/Constant defines
 #define EXIT_FAILURE 1
@@ -30,3 +35,7 @@ void 				*realloc(void *ptr, size_t size);
 // Multibyte characters
 
 // Multibyte strings
+#if defined (__cplusplus)
+}
+#endif 
+#endif

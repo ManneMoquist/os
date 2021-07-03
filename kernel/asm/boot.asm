@@ -26,12 +26,18 @@ align 4
 	dd MAGIC
 	dd FLAGS
 	dd CHECKSUM
+section .bss
+align 16
+stack_bottom:
+resb 16384
+stack_top:
 
 
 ; Initialize a stack
 ; main code section
 section .text
 
+; Just a debugging tool that is not used atm, but I'll keep it here just in case
 _freeze:
 	mov eax, 0xFFFFFFF
 _freeze_loop:
@@ -40,13 +46,14 @@ _freeze_loop:
 	jne _freeze_loop
 	inc byte [0xC00B8000]
 	ret
+
 loader equ (_loader - 0xC0000000)
 global loader
 _loader:
-	mov byte [0x000B8000], 'A'
 	;setup pageing
 	mov ecx, (BootPageDir - KERN_VIRT)
 	mov cr3, ecx
+
 	mov	ecx, cr4
 	or ecx, 0x00000010
 	mov cr4, ecx
@@ -59,8 +66,12 @@ _loader:
 	jmp ecx
 
 _start:
-	;mov dword [BootPageDir], 0
+	mov dword [BootPageDir], 0
 	invlpg [0] ;invalidate the first page it is no longer needed
+
+	; I guess i need to flush
+	mov ecx, cr3
+	mov cr3, ecx
 
 	mov esp, stack_top
 	
@@ -72,9 +83,4 @@ _start:
 .hang:
 	nop
 	jmp .hang
-section .bss
-align 16
-stack_bottom:
-resb 16384
-stack_top:
 
